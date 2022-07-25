@@ -1,2 +1,4 @@
 # dotfiles
-My own little collection of configs
+Before personal dotfiles -> ☹️
+
+After personal dotfiles -> 😄

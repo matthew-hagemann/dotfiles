@@ -17,7 +17,6 @@
   (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
-(setq debug-on-error t)
 (setq use-package-verbose t)
 
 ;; Silence compiler warnings as they can be pretty disruptive
@@ -35,6 +34,10 @@
 
 ;; Global escape
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "C-h") 'evil-window-left)
+(global-set-key (kbd "C-l") 'evil-window-right)
+(global-set-key (kbd "C-j") 'evil-window-down)
+(global-set-key (kbd "C-k") 'evil-window-up)
 ;; Install evil, attach evil-undo to emacs's new undo-redo system thingy.
 (use-package evil
   :init      ;; tweak evil's configuration before loading it
@@ -57,7 +60,10 @@
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.3))
+  (setq which-key-idle-delay 0.8
+	which-key-add-column-padding 1
+        which-key-min-display-lines 3
+  ))
 
 ;; General Keybindings, to make setting keybindings easier
 (use-package general
@@ -143,7 +149,8 @@
        "f"     '(:ignore t :which-key "files")
        "ff"   '(find-file :which-key "Find file")
        "fr"   '(counsel-recentf :which-key "Recent files")
-       "fs"   '(save-buffer :which-key "Save file")
+       "ft"   '(counsel-rg :which-key "ripgrep") ;; t stands for text, cause thats what we are looking though.
+       "fs"   '(swiper :which-key "Swiper") ;; NO SWIPING
        "fu"   '(sudo-edit-find-file :which-key "Sudo find file")
        "fy"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
        "fC"   '(copy-file :which-key "Copy file")
@@ -159,7 +166,43 @@
        "c c"   '(compile :which-key "Compile")
        "c C"   '(recompile :which-key "Recompile")
        "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
+       "t"     '(:igore t :which-key "toggles")
        "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines"))
+
+;; Splits and windows
+(winner-mode 1)
+(leader-key-def
+       "w"     '(:ignore t :which-key "windows")
+       ;; Window splits
+       "w c"   '(evil-window-delete :which-key "Close window")
+       "w n"   '(evil-window-new :which-key "New window")
+       "w s"   '(evil-window-split :which-key "Horizontal split window")
+       "w v"   '(evil-window-vsplit :which-key "Vertical split window")
+       ;; Window motions
+       "w h"   '(evil-window-left :which-key "Window left")
+       "w j"   '(evil-window-down :which-key "Window down")
+       "w k"   '(evil-window-up :which-key "Window up")
+       "w l"   '(evil-window-right :which-key "Window right")
+       "w w"   '(evil-window-next :which-key "Goto next window")
+       ;; winner mode
+       "w <left>"  '(winner-undo :which-key "Winner undo")
+       "w <right>" '(winner-redo :which-key "Winner redo"))
+
+;; Registers
+(leader-key-def
+       "r"     '(:ignore t :which-key "registers")
+       "r c"   '(copy-to-register :which-key "Copy to register")
+       "r f"   '(frameset-to-register :which-key "Frameset to register")
+       "r i"   '(insert-register :which-key "Insert register")
+       "r j"   '(jump-to-register :which-key "Jump to register")
+       "r l"   '(list-registers :which-key "List registers")
+       "r n"   '(number-to-register :which-key "Number to register")
+       "r r"   '(counsel-register :which-key "Choose a register")
+       "r v"   '(view-register :which-key "View a register")
+       "r w"   '(window-configuration-to-register :which-key "Window configuration to register")
+       "r +"   '(increment-register :which-key "Increment register")
+       "r SPC" '(point-to-register :which-key "Point to register"))
+
 ;;;;
 ;; Ivy setup
 ;;
@@ -167,80 +210,122 @@
 ;; Helm, but lets start here and branch out when we are feeling constrained.
 ;;;;
 
-(use-package counsel
-  :after ivy
-  :config (counsel-mode))
 (use-package ivy
-  :defer 0.1
   :diminish
-  :bind
-  (("C-c C-r" . ivy-resume)
-   ("C-x B" . ivy-switch-buffer-other-window))
-  :custom
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  :config
-  (ivy-mode))
-(use-package ivy-rich
-  :after ivy
-  :custom
-  (ivy-virtual-abbreviate 'full
-   ivy-rich-switch-buffer-align-virtual-buffer t
-   ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer)
-  (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
-(use-package swiper
-  :after ivy
   :bind (("C-s" . swiper)
-         ("C-r" . swiper)))
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         ("C-f" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+	 ("C-h" . ivy-backward-delete-char)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :init
+  (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-wrap t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq enable-recursive-minibuffers t)
 
-;; Gets rid of that ‘^’ 
-(setq ivy-initial-inputs-alist nil)
+  ;; Use different regex strategies per completion command
+  (push '(completion-at-point . ivy--regex-fuzzy) ivy-re-builders-alist) ;; This doesn't seem to work...
+  (push '(swiper . ivy--regex-ignore-order) ivy-re-builders-alist)
+  (push '(counsel-M-x . ivy--regex-ignore-order) ivy-re-builders-alist)
 
-;; M-x remembers your history and displays last command first.
-(use-package smex)
-(smex-initialize)
+  ;; Set minibuffer height for different commands
+  (setf (alist-get 'counsel-projectile-ag ivy-height-alist) 15)
+  (setf (alist-get 'counsel-projectile-rg ivy-height-alist) 15)
+  (setf (alist-get 'swiper ivy-height-alist) 15)
+  (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7))
 
-;; Ivy-posframe is an ivy extension, which lets ivy use posframe to show its candidate menu.  Some of the settings below involve:
+(use-package ivy-hydra
+  :defer t
+  :after hydra)
 
-;; ivy-posframe-display-functions-alist – sets the display position for specific programs
-;; ivy-posframe-height-alist – sets the height of the list displayed for specific programs
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1)
+  :after counsel
+  :config
+  (setq ivy-format-function #'ivy-format-function-line)
+  (setq ivy-rich-display-transformers-list
+        (plist-put ivy-rich-display-transformers-list
+                   'ivy-switch-buffer
+                   '(:columns
+                     ((ivy-rich-candidate (:width 40))
+                      (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
+                      (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
+                      (ivy-rich-switch-buffer-project (:width 15 :face success))             ; return project name using `projectile'
+                      (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
+                     :predicate
+                     (lambda (cand)
+                       (if-let ((buffer (get-buffer cand)))
+                           ;; Don't mess with EXWM buffers
+                           (with-current-buffer buffer
+                             (not (derived-mode-p 'exwm-mode)))))))))
 
-;; Available functions (positions) for ‘ivy-posframe-display-functions-alist’
+(use-package counsel
+  :demand t
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         ;; ("C-M-j" . counsel-switch-buffer)
+         ("C-M-l" . counsel-imenu)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history))
+  :custom
+  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  :config
+  (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
 
-;; ivy-posframe-display-at-frame-center
-;; ivy-posframe-display-at-window-center
-;; ivy-posframe-display-at-frame-bottom-left
-;; ivy-posframe-display-at-window-bottom-left
-;; ivy-posframe-display-at-frame-bottom-window-center
-;; ivy-posframe-display-at-point
-;; ivy-posframe-display-at-frame-top-center
+(use-package flx  ;; Improves sorting for fuzzy-matched results
+  :after ivy
+  :defer t
+  :init
+  (setq ivy-flx-limit 10000))
 
-;; NOTE: If the setting for ‘ivy-posframe-display’ is set to ‘nil’ (false), anything that is set to ‘ivy-display-function-fallback’ will just default to their normal position in Doom Emacs (usually a bottom split).  However, if this is set to ‘t’ (true), then the fallback position will be centered in the window.
+(use-package wgrep)
 
 (use-package ivy-posframe
-  :init
-  (setq ivy-posframe-display-functions-alist
-    '((swiper                     . ivy-posframe-display-at-point)
-      (complete-symbol            . ivy-posframe-display-at-point)
-      (counsel-M-x                . ivy-display-function-fallback)
-      (counsel-esh-history        . ivy-posframe-display-at-window-center)
-      (counsel-describe-function  . ivy-display-function-fallback)
-      (counsel-describe-variable  . ivy-display-function-fallback)
-      (counsel-find-file          . ivy-display-function-fallback)
-      (counsel-recentf            . ivy-display-function-fallback)
-      (counsel-register           . ivy-posframe-display-at-frame-bottom-window-center)
-      (dmenu                      . ivy-posframe-display-at-frame-top-center)
-      (nil                        . ivy-posframe-display))
-    ivy-posframe-height-alist
-    '((swiper . 20)
-      (dmenu . 20)
-      (t . 10)))
+  :disabled
+  :custom
+  (ivy-posframe-width      115)
+  (ivy-posframe-min-width  115)
+  (ivy-posframe-height     10)
+  (ivy-posframe-min-height 10)
   :config
-  (ivy-posframe-mode 1)) ; 1 enables posframe-mode, 0 disables it.
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  (setq ivy-posframe-parameters '((parent-frame . nil)
+                                  (left-fringe . 8)
+                                  (right-fringe . 8)))
+  (ivy-posframe-mode 1))
+
+(use-package prescient
+  :after counsel
+  :config
+  (prescient-persist-mode 1))
+
+(use-package ivy-prescient
+  :after prescient
+  :config
+  (ivy-prescient-mode 1))
+
+(leader-key-def
+  "r"   '(ivy-resume :which-key "ivy resume")
+  "f"   '(:ignore t :which-key "files")
+  "ff"  '(counsel-find-file :which-key "open file")
+  "C-f" 'counsel-find-file
+  "fr"  '(counsel-recentf :which-key "recent files")
+  "fR"  '(revert-buffer :which-key "revert file")
+  "fj"  '(counsel-file-jump :which-key "jump to file"))
 
 ;;;;
 ;; Git client through Magit
@@ -316,7 +401,7 @@
   (add-to-list 'exec-path "~/Go/bin")
   (setq gofmt-command "goimports"))
 
-;; Rust
+;; Rust you need the rust toolchain and rust-analyzer
 (use-package rustic
   :ensure t
   :bind (("C-c 6" . rustic-format-buffer))
@@ -324,10 +409,24 @@
   (require 'lsp-rust))
 
 ;;Python
+;; Requires the following:
+;; pip3 install jedi autopep8 flake8 ipython importmagic yapf
 (use-package elpy
   :ensure t
   :init
   (elpy-enable))
+
+;; Gosh Python can complain about formatting...
+(use-package py-autopep8)
+(use-package blacken)
+
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;; Autoformat on save
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
 ;;;;
 ;; GUI
@@ -383,7 +482,39 @@
 (global-display-line-numbers-mode 1)
 (global-visual-line-mode t)
 
-;;Treemacs
+;; Eshell
+(leader-key-def
+      "e h"   '(counsel-esh-history :which-key "Eshell history")
+      "e s"   '(eshell :which-key "Eshell"))
+
+;; ’eshell-syntax-highlighting’ – adds fish/zsh-like syntax highlighting.
+;; ’eshell-rc-script’ – your profile for eshell; like a bashrc for eshell.
+;; ’eshell-aliases-file’ – sets an aliases file for the eshell.
+
+(use-package eshell-syntax-highlighting
+  :after esh-mode
+  :config
+  (eshell-syntax-highlighting-global-mode +1))
+
+(setq eshell-rc-script (concat user-emacs-directory "eshell/profile")
+      eshell-aliases-file (concat user-emacs-directory "eshell/aliases")
+      eshell-history-size 5000
+      eshell-buffer-maximum-lines 5000
+      eshell-hist-ignoredups t
+      eshell-scroll-to-bottom-on-input t
+      eshell-destroy-buffer-when-process-dies t
+      eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
+
+;; Vterm, cause you can never have too many terminals.
+(use-package vterm)
+(setq shell-file-name "/bin/zsh"
+      vterm-max-scrollback 5000
+      vterm-timer-delay 0.001)
+
+(leader-key-def
+      "t v"   '(vterm :which-key "Vterm"))
+
+;; Treemacs
 (use-package treemacs
   :ensure t)
 (treemacs-follow-mode t)
@@ -391,7 +522,7 @@
 (treemacs-fringe-indicator-mode 'always)
 
 (use-package treemacs-evil
-  :after (treemacs evil)
+ :after (treemacs evil)
   :ensure t)
 
 (use-package projectile
@@ -426,7 +557,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(elpy company lsp-mode treemacs-evil treemacs neotree which-key use-package evil-collection doom-themes doom-modeline)))
+   '(ivy-prescient prescient wgrep flx ivy-hydra vterm blacken py-autopep8 elpy company lsp-mode treemacs-evil treemacs neotree which-key use-package evil-collection doom-themes doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

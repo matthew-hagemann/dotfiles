@@ -149,16 +149,16 @@
        "f"     '(:ignore t :which-key "files")
        "ff"   '(find-file :which-key "Find file")
        "fr"   '(counsel-recentf :which-key "Recent files")
-       "ft"   '(counsel-rg :which-key "ripgrep") ;; t stands for text, cause thats what we are looking though.
-       "fs"   '(swiper :which-key "Swiper") ;; NO SWIPING
        "fu"   '(sudo-edit-find-file :which-key "Sudo find file")
        "fy"   '(dt/show-and-copy-buffer-path :which-key "Yank file path")
        "fC"   '(copy-file :which-key "Copy file")
        "fD"   '(delete-file :which-key "Delete file")
        "fR"   '(rename-file :which-key "Rename file")
        "fS"   '(write-file :which-key "Save file as...")
-       "fU"   '(sudo-edit :which-key "Sudo edit file"))
-
+       "fU"   '(sudo-edit :which-key "Sudo edit file")
+       "s"    '(:ignore t :which-key "search") 
+       "sr"   '(counsel-rg :which-key "ripgrep") ;; t stands for text, cause thats what we are looking though.
+       "ss"   '(swiper :which-key "Swiper")) ;; NO SWIPING
 ;; General keybindings, all Doom inspired.
 (leader-key-def
        "SPC"   '(counsel-M-x :which-key "M-x")

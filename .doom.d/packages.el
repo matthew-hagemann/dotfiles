@@ -49,3 +49,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 (package! dashboard)
+(package! compile)
+(package! tree-sitter)
+(package! tree-sitter-langs)

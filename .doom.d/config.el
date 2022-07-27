@@ -123,6 +123,27 @@
   (dashboard-setup-startup-hook)
   (dashboard-modify-heading-icons '((recents . "file-text")
 			      (bookmarks . "book"))))
+
+(setq doom-fallback-buffer-name "*dashboard*")
+;; Compiler:
+(use-package compile
+  :custom
+  (compilation-scroll-output t)) ;; autoscroll the output
+
+(setq doom-themes-treemacs-theme "doom-colors")
+
+;;; Tree Sitter
+
+(use-package! tree-sitter
+   :hook (prog-mode . turn-on-tree-sitter-mode)
+   :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+   :config
+   (require 'tree-sitter-langs)
+   ;; This makes every node a link to a section of code
+   (setq tree-sitter-debug-jump-buttons t
+         ;; and this highlights the entire sub tree in your code
+         tree-sitter-debug-highlight-jump-region t))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;

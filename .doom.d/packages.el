@@ -52,3 +52,4 @@
 (package! compile)
 (package! tree-sitter)
 (package! tree-sitter-langs)
+(package! lsp-treemacs)

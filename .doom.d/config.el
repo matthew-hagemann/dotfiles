@@ -96,18 +96,21 @@
       eshell-destroy-buffer-when-process-dies t
       eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
 
+;; General keybindings
 (map! :leader
       :desc "Eshell" "e s" #'eshell
       :desc "Eshell popup toggle" "e t" #'+eshell/toggle
       :desc "Counsel eshell history" "e h" #'counsel-esh-history
       :desc "Vterm popup toggle" "t v" #'+vterm/toggle
-      :desc "Toggle treemacs" "t t" #'+treemacs/toggle)
+      :desc "Toggle treemacs" "t e" #'+treemacs/toggle
+      :desc "Toggle truncate lines" "t t" #'toggle-truncate-lines
+      :desc "Comment line" "c /" #'comment-or-uncomment-region)
 
 ;; GOPATH/bin
 (add-to-list 'exec-path "~/Go/bin")
 
 
-;; Dashboard
+;; ;; Dashboard
 (use-package dashboard
   :init      ;; tweak dashboard config before loading it
   (setq dashboard-set-heading-icons t)
@@ -131,6 +134,10 @@
   (compilation-scroll-output t)) ;; autoscroll the output
 
 (setq doom-themes-treemacs-theme "doom-colors")
+
+;; lsp-treemacs
+(use-package! lsp-treemacs)
+(lsp-treemacs-sync-mode 1)
 
 ;;; Tree Sitter
 

@@ -96,6 +96,12 @@
       eshell-destroy-buffer-when-process-dies t
       eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
 
+
+;; lsp-treemacs
+(use-package! lsp-treemacs)
+(lsp-treemacs-sync-mode 1)
+
+
 ;; General keybindings
 (map! :leader
       :desc "Eshell" "e s" #'eshell
@@ -104,7 +110,8 @@
       :desc "Vterm popup toggle" "t v" #'+vterm/toggle
       :desc "Toggle treemacs" "t e" #'+treemacs/toggle
       :desc "Toggle truncate lines" "t t" #'toggle-truncate-lines
-      :desc "Comment line" "c /" #'comment-or-uncomment-region)
+      :desc "Comment line" "c /" #'comment-or-uncomment-region
+      :desc "Treemacs error list" "c z" #'lsp-treemacs-errors-list)
 
 ;; GOPATH/bin
 (add-to-list 'exec-path "~/Go/bin")
@@ -135,9 +142,6 @@
 
 (setq doom-themes-treemacs-theme "doom-colors")
 
-;; lsp-treemacs
-(use-package! lsp-treemacs)
-(lsp-treemacs-sync-mode 1)
 
 ;;; Tree Sitter
 

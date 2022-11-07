@@ -53,3 +53,4 @@
 (package! tree-sitter)
 (package! tree-sitter-langs)
 (package! lsp-treemacs)
+(package! protobuf-mode)

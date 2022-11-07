@@ -116,6 +116,9 @@
 ;; GOPATH/bin
 (add-to-list 'exec-path "~/Go/bin")
 
+;; protobuf
+(use-package! protobuf-mode)
+(protobuf-mode 1)
 
 ;; ;; Dashboard
 (use-package dashboard

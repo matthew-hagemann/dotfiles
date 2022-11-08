@@ -99,7 +99,6 @@
 
 ;; lsp-treemacs
 (use-package! lsp-treemacs)
-(lsp-treemacs-sync-mode 1)
 
 
 ;; General keybindings

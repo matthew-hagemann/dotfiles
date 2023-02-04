@@ -34,7 +34,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-dracula)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -53,9 +53,12 @@
 ;; 'font-lock-comment-face' - Comments look cool when coding.
 ;;  'font-lock-keyword-face' - Keywords look cool while coding.
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 14)
-      doom-variable-pitch-font (font-spec :family "FiraCode Nerd Font" :size 14)
-      doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24))
+;; (setq doom-font (font-spec :family "MesloLGLDZ Nerd Font Mono" :size 18)
+;;       doom-variable-pitch-font (font-spec :family "MesloLGLDZ Nerd Font Mono" :size 18)
+;;       doom-big-font (font-spec :family "MesloLGLDZ Nerd Font Mono" :size 26))
+(setq doom-font (font-spec :family "GoMono Nerd Font Mono" :size 18)
+      doom-variable-pitch-font (font-spec :family "GoMono Nerd Font Mono" :size 18)
+      doom-big-font (font-spec :family "GoMono Nerd Font Mono" :size 26))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
@@ -110,31 +113,15 @@
       :desc "Toggle treemacs" "t e" #'+treemacs/toggle
       :desc "Toggle truncate lines" "t t" #'toggle-truncate-lines
       :desc "Comment line" "c /" #'comment-or-uncomment-region
+      :desc "Other frame" "w O" #'other-frame
       :desc "Treemacs error list" "c z" #'lsp-treemacs-errors-list)
 
 ;; GOPATH/bin
 (add-to-list 'exec-path "~/Go/bin")
 
 ;; protobuf
-(use-package! protobuf-mode)
-(protobuf-mode 1)
-
-;; ;; Dashboard
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "This is what happens when noone gives me CLion!")
-  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-startup-banner "~/.emacs.d/ferris.png")  ;; use custom image as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
-                          (bookmarks . 5)
-                          (projects . 5)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-			      (bookmarks . "book"))))
+;;(use-package! protobuf-mode)
+;;(protobuf-mode 1)
 
 (setq doom-fallback-buffer-name "*dashboard*")
 ;; Compiler:

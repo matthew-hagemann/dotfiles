@@ -92,6 +92,13 @@
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
+;; Set a scroll margin
+(setq scroll-margin 5
+      scroll-conservatively 101
+      auto-window-vscroll nil
+      fast-but-imprecise-scrolling nil
+      )
+
 ;; Really liked how Doom did things, so going to borrow from there for now :)
 ;; Bindings for buffers and bookmarks
 (leader-key-def
@@ -120,6 +127,7 @@
 (use-package peep-dired)
 
 (leader-key-def
+  
                "d"   '(:ignore t :which-key "dired")
                "dd" '(dired :which-key "Open dired")
                "dj" '(dired-jump :which-key "Dired jump to current")
@@ -127,6 +135,7 @@
 
 (with-eval-after-load 'dired
   ;;(define-key dired-mode-map (kbd "M-p") 'peep-dired)
+  ;; (evil-define-key 'normal dired-mode-map (kbd "SPC") 'which-ker)
   (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
   (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
   (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
@@ -142,6 +151,12 @@
                               ("png" . "sxiv")
                               ("mkv" . "mpv")
                               ("mp4" . "mpv")))
+
+;; By default, SPC runs 'dired-next-line', I want it to be 'which-key'
+;; (defun dired-which-key-hook ()
+;;   (local-set-key (kbd "SPC") #'which-key))
+
+;; (add-hook 'dired-mode-hook #'dired-which-key-hook)
 
 ;; File-related keybindings. Also very Doom inspired. 
 (leader-key-def
@@ -165,16 +180,24 @@
        "c"     '(:ignore t :which-key "code")
        "c c"   '(compile :which-key "Compile")
        "c C"   '(recompile :which-key "Recompile")
+       "c /"   '(comment-region :which-key "Comment Out")
        "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
        "t"     '(:igore t :which-key "toggles")
        "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines"))
+
+;; A function that closes minibuffers or windows from the same binding
+(defun abs-close-window ()
+  (interactive)
+  (if (window-minibuffer-p)
+      (keyboard-escape-quit)
+    (evil-window-delete)))
 
 ;; Splits and windows
 (winner-mode 1)
 (leader-key-def
        "w"     '(:ignore t :which-key "windows")
        ;; Window splits
-       "w c"   '(evil-window-delete :which-key "Close window")
+       "w c"   '(abs-close-window :which-key "Close window")
        "w n"   '(evil-window-new :which-key "New window")
        "w s"   '(evil-window-split :which-key "Horizontal split window")
        "w v"   '(evil-window-vsplit :which-key "Vertical split window")
@@ -266,7 +289,7 @@
                       (ivy-rich-switch-buffer-project (:width 15 :face success))             ; return project name using `projectile'
                       (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
                      :predicate
-                     (lambda (cand)
+                     (lambda (cand) 
                        (if-let ((buffer (get-buffer cand)))
                            ;; Don't mess with EXWM buffers
                            (with-current-buffer buffer
@@ -447,15 +470,15 @@
 
 ;; Fonts
 (set-face-attribute 'default nil
-  :font "FiraCode Nerd Font"
+  :font "GoMono Nerd Font Mono"
   :height 150
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
-  :font "FiraCode Nerd Font"
+  :font "GoMono Nerd Font Mono"
   :height 150
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-  :font "FiraCode Nerd Font"
+  :font "GoMono Nerd Font Mono"
   :height 150
   :weight 'medium)
 ;; Makes commented text and keywords italics.

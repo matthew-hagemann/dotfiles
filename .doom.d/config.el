@@ -67,11 +67,15 @@
   '(font-lock-keyword-face :slant italic))
 
 ;; Rust
-(after! lsp-rust
+(after! rustic
   (setq lsp-rust-server 'rust-analyzer))
 
-;; Registers
+;; Debugger setup
+(setq dap-auto-configure-mode t)
+(after! dap-mode
+  (require 'dap-cpptools))
 
+;; Registers
 (map! :leader
       (:prefix ("r" . "registers")
        :desc "Copy to register" "c" #'copy-to-register
@@ -113,8 +117,11 @@
       :desc "Toggle treemacs" "t e" #'+treemacs/toggle
       :desc "Toggle truncate lines" "t t" #'toggle-truncate-lines
       :desc "Comment line" "c /" #'comment-or-uncomment-region
-      :desc "Other frame" "w O" #'other-frame
+      :desc "Other frame" "w f" #'other-frame
+      :desc "Spawn Frame" "w O" #'make-frame-command
       :desc "Treemacs error list" "c z" #'lsp-treemacs-errors-list)
+
+
 
 ;; GOPATH/bin
 (add-to-list 'exec-path "~/Go/bin")

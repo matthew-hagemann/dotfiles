@@ -66,6 +66,12 @@
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
 
+;; Python
+(use-package! python-black
+  :demand t
+  :after python)
+(add-hook! 'python-mode-hook #'python-black-on-save-mode)
+
 ;; Rust
 (after! rustic
   (setq lsp-rust-server 'rust-analyzer))

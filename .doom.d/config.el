@@ -72,6 +72,13 @@
   :after python)
 (add-hook! 'python-mode-hook #'python-black-on-save-mode)
 
+(map! :leader
+      (:prefix ("v" . "venv")
+       :desc "Create venv" "c" #'pyvenv-create
+       :desc "Activate venv" "a" (lambda () (interactive) (call-interactively 'pyvenv-activate))
+       :desc "Deactivate venv" "d" #'pyvenv-deactivate))
+
+
 ;; Rust
 (after! rustic
   (setq lsp-rust-server 'rust-analyzer))

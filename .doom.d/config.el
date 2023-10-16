@@ -136,7 +136,7 @@
 
 
 ;; GOPATH/bin
-(add-to-list 'exec-path "~/Go/bin")
+(add-to-list 'exec-path "~/go/bin")
 
 ;; protobuf
 ;;(use-package! protobuf-mode)

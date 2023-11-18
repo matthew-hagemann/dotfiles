@@ -56,9 +56,9 @@
 ;; (setq doom-font (font-spec :family "MesloLGLDZ Nerd Font Mono" :size 18)
 ;;       doom-variable-pitch-font (font-spec :family "MesloLGLDZ Nerd Font Mono" :size 18)
 ;;       doom-big-font (font-spec :family "MesloLGLDZ Nerd Font Mono" :size 26))
-(setq doom-font (font-spec :family "GoMono Nerd Font Mono" :size 18)
-      doom-variable-pitch-font (font-spec :family "GoMono Nerd Font Mono" :size 18)
-      doom-big-font (font-spec :family "GoMono Nerd Font Mono" :size 26))
+(setq doom-font (font-spec :family "Ubuntu Nerd Font" :size 18)
+      doom-variable-pitch-font (font-spec :family "Ubuntu Nerd Font" :size 18)
+      doom-big-font (font-spec :family "Ubuntu Nerd Font" :size 26))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
@@ -162,14 +162,14 @@
 ;;; Tree Sitter
 
 (use-package! tree-sitter
-   :hook (prog-mode . turn-on-tree-sitter-mode)
-   :hook (tree-sitter-after-on . tree-sitter-hl-mode)
-   :config
-   (require 'tree-sitter-langs)
-   ;; This makes every node a link to a section of code
-   (setq tree-sitter-debug-jump-buttons t
-         ;; and this highlights the entire sub tree in your code
-         tree-sitter-debug-highlight-jump-region t))
+  :hook (prog-mode . turn-on-tree-sitter-mode)
+  :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+  :config
+  (require 'tree-sitter-langs)
+  ;; This makes every node a link to a section of code
+  (setq tree-sitter-debug-jump-buttons t
+        ;; and this highlights the entire sub tree in your code
+        tree-sitter-debug-highlight-jump-region t))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.

@@ -12,6 +12,9 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 . "$HOME/.asdf/asdf.sh"
 . "$HOME/.asdf/completions/asdf.bash"
 
+# Flutter
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME

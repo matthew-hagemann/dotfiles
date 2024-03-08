@@ -7,6 +7,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Export bins
 export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:/opt/nvim-linux64/bin"
+export PATH="$PATH":"$HOME/.local/bin"
 
 # asdf
 . "$HOME/.asdf/asdf.sh"
@@ -14,6 +15,9 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 
 # Flutter
 export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+# Go
+export PATH="$PATH:$(go env GOPATH)/bin"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

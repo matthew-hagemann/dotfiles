@@ -56,8 +56,8 @@ autoload -Uz compinit && compinit
 
 # Keybindings
 bindkey -e
-bindkey '^p' history-search-backward
-bindkey '^n' history-search-forward
+bindkey '^p' history-beginning-search-backward
+bindkey '^n' history-beginning-search-forward
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 

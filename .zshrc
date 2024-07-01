@@ -72,6 +72,9 @@ export PATH="$PATH":"$HOME/.local/bin"
 # Flutter
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
+# asdf
+export PATH="$PATH":"$HOME/.asdf/bin"
+
 # Go
 export PATH="$PATH:$(go env GOPATH)/bin"
 

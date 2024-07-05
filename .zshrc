@@ -80,6 +80,7 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 
 alias ls='ls --color'
 alias m="multipass"
+alias cat="bat"
 
 eval "$(zoxide init --cmd cd zsh)"
 

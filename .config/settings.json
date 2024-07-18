@@ -1,0 +1,54 @@
+{
+  "features": {
+    "inline_completion_provider": "none"
+  },
+  // Don't track me plz
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  // Naturally
+  "vim_mode": true,
+  "ui_font_size": 14,
+  "buffer_font_size": 14,
+  "buffer_font_family": "Zed Plex Mono",
+  // Keep the lines of code close together
+  "buffer_line_height": "standard",
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Monokai Charcoal (gray)"
+  },
+  // Keep me more centered
+  "vertical_scroll_margin": 8,
+  // gross
+  "scrollbar": {
+    "show": "never"
+  },
+  // gross
+  "project_panel": {
+    "scrollbar": {
+      "show": "never"
+    }
+  },
+  // I keep hitting this by mistake
+  "outline_panel": {
+    "button": false
+  },
+  // I can't math jumps that fast!
+  "relative_line_numbers": true,
+  "gutter": {
+    // Whether to show line numbers in the gutter.
+    "line_numbers": true,
+    // Whether to show code action buttons in the gutter.
+    "code_actions": false,
+    // Whether to show runnables buttons in the gutter.
+    "runnables": false,
+    // Whether to show fold buttons in the gutter.
+    "folds": false
+  },
+  "inlay_hints": {
+    // Global switch to toggle hints on and off, switched off by default.
+    "enabled": true
+  }
+}

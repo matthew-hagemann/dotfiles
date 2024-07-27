@@ -81,6 +81,9 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 alias ls='ls --color'
 alias m="multipass"
 alias cat="bat"
+alias qt="gsettings set org.gnome.desktop.input-sources sources \"[('xkb', 'us')]\""
+alias ck="gsettings set org.gnome.desktop.input-sources sources \"[('xkb', 'us+colemak_dh')]\""
+
 
 eval "$(zoxide init --cmd cd zsh)"
 

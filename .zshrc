@@ -91,3 +91,9 @@ eval "$(zoxide init --cmd cd zsh)"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/matt/.dart-cli-completion/zsh-config.zsh ]] && . /home/matt/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+

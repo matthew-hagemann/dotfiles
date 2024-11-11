@@ -70,6 +70,7 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH="$PATH":"$HOME/.local/bin"
 
 # Flutter
+export PATH="$PATH":"$HOME/flutter/bin"
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 # asdf
